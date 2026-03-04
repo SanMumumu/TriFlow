@@ -101,7 +101,8 @@ def set_random_seed(seed):
 
 
 def file_name(args):
-    fn = f'{args.exp}_{args.id}_{args.data}'
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    fn = f'{current_time}_{args.exp}_{args.id}_{args.data}'
     fn += f'_{args.seed}'
     return fn
 
