@@ -148,3 +148,26 @@ class MultiModalCityscapesDataset(MultiModalImageFramesDataset):
         self.video_list_depth = sorted(glob(os.path.join(self.path_depth, '*', '*.png')))
         self.video_list_depth = [self.video_list_depth[i:i + self.video_len] for i in
                                  range(0, len(self.video_list_depth), self.video_len)]
+
+
+class BairDataset(ImageFramesDataset):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Load the list of videos paths
+        self.load_video_paths()
+
+        if 'max_size' in kwargs and kwargs['max_size'] is not None:
+            self.video_list = self.video_list[:kwargs['max_size']]
+
+    def load_video_paths(self):
+        traj_dirs = sorted(glob(os.path.join(self.path, '*')))
+        self.video_list = []
+        
+        for traj_dir in traj_dirs:
+            frames = sorted(glob(os.path.join(traj_dir, '*.png')))
+            if len(frames) >= self.video_len:
+                self.video_list.append(frames[:self.video_len])
+
+
+class MultiModalBairDataset(MultiModalImageFramesDataset):
